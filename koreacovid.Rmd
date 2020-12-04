@@ -1,7 +1,7 @@
 ---
 title: "covid 19"
-author: "Dr K"
-date: "5/2/2020"
+author: "Maryana Maayah"
+date: "Fall 2020"
 output:
   html_document: default
   pdf_document: default
@@ -18,45 +18,47 @@ kRdata <- read.csv(file = 'kRdata.csv')
 ### Data is from the Patient_Info dataset from South Korea 1 Jan to 1 May 
 ### This is contained in a downloadable zip file from kaggle
 
-Some of the data was uncoded for sex - sex must be just male or female
-77 of the data entries were coded sex  as blank, so we omit these.
-state of a patient must be died or alive - we adjust that as well   
-  
+$H_0$:no difference between death rate due to covid 19 between men and women   
+
+$H_1$: there is a difference between rate due to covid 19 between men and women
+
+Some data is not gender-coded - the gender should only be male or female
+77 of the data entries were genes encoded as null, so we delete them.
+Should the patient be alive or dying - we adjust that too 
+ 
 # Question 1 - Is dying independent of sex
-
-
-
-
-Table of patients:
-```{r}
-
-# cross tabulation, patient state by gender
-
-with(kRdata, table(Sex, result))
-
-```
 
 ## We create two bar charts - one based on frequency and the other on percent
 
+
 ```{r}
-barchartGC(~result + Sex,data=kRdata, main ="Frequency Bar Chart")
+barchartGC(~result + sex,data=kRdata)
+barchartGC(~result + sex,data=kRdata, type="percent")
+
+```
+  
+The bar graph shows that more males have died from COVID-19 than females
+  
+Table of patients:
+```{r}
+table1 <- xtabs(~result + sex,data=kRdata)
+rowPerc(table1)
+colPerc(table1)
+print(table1)
 ```
 
+The numerical summary shows the large proportion of males who died among the females
+
+
+```{r}
+chisq.test(table1)
+chisqtestGC(table1)
+fisher.test(table1)
+```
+
+If you are a male a grater 2.3 times then if you are a female
+The 95 percent confidence interval is 1.4 to 3.9. This means that more men smoke than females
   
-### this bar chart is displaying in total frequency terms our data.  Clearly there are a lot less dead people than alive people as is reflected by the sizes of the bars in the display.  
-
-
-
-
-
-  
-## Numerical results
-
-
-## Inferential results 
-
-
-
-
 ## Conclusions
 
+Death is not independent of gender. Men are more likely than women to die
